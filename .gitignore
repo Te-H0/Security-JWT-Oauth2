@@ -35,5 +35,4 @@ out/
 
 ### VS Code ###
 .vscode/
-application-base-addi.yaml
-
+/src/main/resources/application-base-adi.yml
