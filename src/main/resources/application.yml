@@ -29,10 +29,20 @@ spring:
     level:
       me.pracitce: info
 
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          kakao:
-#            clientId: profile_nickname, profile_image,
-#            scope:
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            clientId:
+            scope: profile_nickname, profile_image,
+            client-name: kakao
+            authorization-grant-type: authorization_code
+              redirect-uri: http://localhost:8080/kakao/callback
+              client-authentication-method: POST
+              provider:
+                kakao:
+                  authorization-uri: https://kauth.kakao.com/oauth/authorize
+                  token-uri: https://kauth.kakao.com/oauth/token
+                  user-info-uri: https://kapi.kakao.com/v2/user/me
+                  user-name-attribute: id
