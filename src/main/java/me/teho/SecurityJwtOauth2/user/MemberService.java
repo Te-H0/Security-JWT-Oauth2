@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -36,19 +34,19 @@ public class MemberService {
 
     }
 
-    /**
-     * member id로 회원 조회
-     */
-    public Optional<Member> findMemberById(Long id) {
-        return memberRepository.findMemberById(id);
-    }
-
-    /**
-     * token 일치 확인
-     */
-    public boolean verifyWithMemberToken(Member member, String token) {
-        return member.getAccessToken().equals(token);
-    }
+//    /**
+//     * member id로 회원 조회
+//     */
+//    public Optional<Member> findMemberById(Long id) {
+//        return memberRepository.findMemberById(id);
+//    }
+//
+//    /**
+//     * token 일치 확인
+//     */
+//    public boolean verifyWithMemberToken(Member member, String token) {
+//        return member.getAccessToken().equals(token);
+//    }
 
     @Transactional
     public String genAccessToken(Member member) {
