@@ -75,10 +75,12 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
 
                 )
+
                 .headers(headers ->
                         headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin
                         )
                 )
+                
                 .apply(new JwtSecurityConfig(jwtProvider));
         return httpSecurity.build();
     }
