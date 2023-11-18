@@ -44,9 +44,9 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         Member member = null;
         String oauthType = userRequest.getClientRegistration().getRegistrationId().toUpperCase();
 
-        if (!"KAKAO".equals(oauthType)) {
-            throw new OAuthTypeMatchNotFoundException();
-        }
+//        if (!"KAKAO".equals(oauthType)) {
+//            throw new OAuthTypeMatchNotFoundException();
+//        }
 
         if (isNew(oauthType, oauthId)) {
             switch (oauthType) {

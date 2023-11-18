@@ -1,10 +1,13 @@
 package me.teho.SecurityJwtOauth2.user;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.teho.SecurityJwtOauth2.jwt.JwtProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -28,6 +31,10 @@ public class MemberService {
             throw new RuntimeException("PW ERROR!");
         }
         String jwt = jwtProvider.generateAccessToken(loginMember.getEmail());
+
+        //claim 열어보기 => user의 이메일
+        Claims claims = jwtProvider.getClaims(jwt);
+        log.info("User의 claim의 subject(email) => {}", claims.getSubject());
         return jwt;
 
     }

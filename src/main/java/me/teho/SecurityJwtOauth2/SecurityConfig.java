@@ -8,7 +8,6 @@ import me.teho.SecurityJwtOauth2.jwt.JwtSecurityConfig;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,13 +18,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Configuration
@@ -40,7 +34,7 @@ public class SecurityConfig {
     private final OAuth2UserService<org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest, org.springframework.security.oauth2.core.user.OAuth2User> oAuth2UserService;
 
     public SecurityConfig(JwtProvider jwtProvider, JwtAccessDeniedHandler jwtAccessDeniedHandler, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint
-            , OAuth2UserService<org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest, org.springframework.security.oauth2.core.user.OAuth2User> oAuth2UserService) {
+            , OAuth2UserService oAuth2UserService) {
         this.jwtProvider = jwtProvider;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
@@ -93,8 +87,8 @@ public class SecurityConfig {
 
                 .oauth2Login(
                         oauth2Login -> oauth2Login
-//                                .loginPage("/login")
-                                .successHandler(successHandler())
+//                                loginPage("/login")
+                                //.successHandler(successHandler())
                                 .userInfoEndpoint(userInfoEndPoint -> userInfoEndPoint
                                         .userService(oAuth2UserService))
 
@@ -104,23 +98,23 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
-    @Bean
-    public AuthenticationSuccessHandler successHandler() {
-        log.info("소셜로그인성공!");
-        return ((request, response, authentication) -> {
-            DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
-
-            String id = defaultOAuth2User.getAttributes().get("id").toString();
-            String body = """
-                    {"id":"%s"}
-                    """.formatted(id);
-
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-            PrintWriter writer = response.getWriter();
-            writer.println(body);
-            writer.flush();
-        });
-    }
+//    @Bean
+//    public AuthenticationSuccessHandler successHandler() {
+//        log.info("소셜로그인성공!");
+//        return ((request, response, authentication) -> {
+//            DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
+//
+//            String id = defaultOAuth2User.getAttributes().get("id").toString();
+//            String body = """
+//                    {"id":"%s"}
+//                    """.formatted(id);
+//
+//            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+//
+//            PrintWriter writer = response.getWriter();
+//            writer.println(body);
+//            writer.flush();
+//        });
+//    }
 }
