@@ -5,12 +5,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import me.teho.SecurityJwtOauth2.user.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -32,12 +29,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("들어오기는하냐??????????");
+        log.info("요청 url in filter => {}", request.getRequestURI());
         String bearerToken = request.getHeader("Authorization");
-        String teho = request.getHeader("lee");
         String requestURI = request.getRequestURI();
         log.info("!!!!!!! TOKEN => {}", bearerToken);
-        log.info("!!!!!!! lee => {}", teho);
+
         if (bearerToken != null) {
             String token = bearerToken.substring("Bearer ".length());
             log.info("1");
@@ -46,9 +42,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             if (jwtProvider.verify(token)) {
                 Authentication authentication = jwtProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                logger.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+                log.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
             } else {
-                logger.info("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
+                log.info("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
 
 //                // Token에서 사용자 정보 꺼내기
 //                String memberEmail = "";
@@ -76,18 +72,18 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     }
 
-    private void forceAuthentication(Member member) {
-        MemberContext memberContext = new MemberContext(member);
-
-        UsernamePasswordAuthenticationToken authentication =
-                UsernamePasswordAuthenticationToken.authenticated(
-                        memberContext,
-                        null,
-                        member.getAuthorities()
-                );
-
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(authentication);
-        SecurityContextHolder.setContext(context);
-    }
+//    private void forceAuthentication(Member member) {
+//        MemberContext memberContext = new MemberContext(member);
+//
+//        UsernamePasswordAuthenticationToken authentication =
+//                UsernamePasswordAuthenticationToken.authenticated(
+//                        memberContext,
+//                        null,
+//                        member.getAuthorities()
+//                );
+//
+//        SecurityContext context = SecurityContextHolder.createEmptyContext();
+//        context.setAuthentication(authentication);
+//        SecurityContextHolder.setContext(context);
+//    }
 }
