@@ -21,7 +21,7 @@ public class MemberController {
     @Value("${jwt.header}")
     private String accessHeader;
 
-    // 현재는 필요 없음. 로컬 로그인 생길 시 사용.
+
     @PostMapping("/sign-up")
     public ResponseEntity<MemberSignUpDto> join(@Valid @RequestBody MemberSignUpDto userSignUpDto) {
         MemberSignUpDto joinMember = memberService.join(userSignUpDto);

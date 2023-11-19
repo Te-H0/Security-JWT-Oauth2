@@ -71,4 +71,19 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         return Optional.ofNullable(request.getHeader(AUTHORIZE_HEADER));
 
     }
+
+//    private void forceAuthentication(Member member) {
+//        MemberContext memberContext = new MemberContext(member);
+//
+//        UsernamePasswordAuthenticationToken authentication =
+//                UsernamePasswordAuthenticationToken.authenticated(
+//                        memberContext,
+//                        null,
+//                        member.getAuthorities()
+//                );
+//
+//        SecurityContext context = SecurityContextHolder.createEmptyContext();
+//        context.setAuthentication(authentication);
+//        SecurityContextHolder.setContext(context);
+//    }
 }
