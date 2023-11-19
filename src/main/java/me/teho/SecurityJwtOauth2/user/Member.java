@@ -1,15 +1,12 @@
 package me.teho.SecurityJwtOauth2.user;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -25,13 +22,12 @@ public class Member extends BaseEntity {
 //    @Column(columnDefinition = "TEXT")
 //    private String accessToken;
 
-    // 현재 회원이 가지고 있는 권한들을 List<GrantedAuthority> 형태로 리턴
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("MEMBER"));
-
-        return authorities;
-    }
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(
+            name = "user_authority",
+            joinColumns = {@JoinColumn(name = "id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "Authority_id", referencedColumnName = "Authority_id")})
+    private Set<Authority> authorities = new HashSet<>();
 
 //    public Map<String, Object> getAccessTokenClaims() {
 //        return Util.mapOf(

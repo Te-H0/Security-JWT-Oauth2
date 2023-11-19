@@ -18,7 +18,6 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -37,14 +36,13 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    private final OAuth2UserService<org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest, org.springframework.security.oauth2.core.user.OAuth2User> oAuth2UserService;
 
     public SecurityConfig(JwtProvider jwtProvider, JwtAccessDeniedHandler jwtAccessDeniedHandler, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint
-            , OAuth2UserService<org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest, org.springframework.security.oauth2.core.user.OAuth2User> oAuth2UserService) {
+    ) {
         this.jwtProvider = jwtProvider;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-        this.oAuth2UserService = oAuth2UserService;
+
     }
 
     @Bean
@@ -82,6 +80,8 @@ public class SecurityConfig {
                                         new AntPathRequestMatcher("/sign-up"),
                                         new AntPathRequestMatcher("/kakao/callback")).permitAll()
                                 .requestMatchers(PathRequest.toH2Console()).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/admintest")).hasRole("ADMIN")
+
                                 .anyRequest().authenticated()
 
                 )
@@ -91,14 +91,14 @@ public class SecurityConfig {
                         )
                 )
 
-                .oauth2Login(
-                        oauth2Login -> oauth2Login
-//                                .loginPage("/login")
-                                .successHandler(successHandler())
-                                .userInfoEndpoint(userInfoEndPoint -> userInfoEndPoint
-                                        .userService(oAuth2UserService))
-
-                )
+//                .oauth2Login(
+//                        oauth2Login -> oauth2Login
+////                                .loginPage("/login")
+//                                .successHandler(successHandler())
+//                                .userInfoEndpoint(userInfoEndPoint -> userInfoEndPoint
+//                                        .userService(oAuth2UserService))
+//
+//                )
 
                 .apply(new JwtSecurityConfig(jwtProvider));
         return httpSecurity.build();

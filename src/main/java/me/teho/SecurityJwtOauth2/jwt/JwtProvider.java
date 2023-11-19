@@ -42,13 +42,18 @@ public class JwtProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateAccessToken(String claimEmail) {
+    public String generateAccessToken(Authentication authentication) {
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
         long now = new Date().getTime();
         Date accessTokenExpiresIn = new Date(now + this.accessTokenExpirationPeriod);
 
         return Jwts.builder()
                 .setIssuedAt(new Date())
-                .setSubject(claimEmail)
+                .setSubject(authorities)
+                .claim("email", authentication.getName())
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
@@ -92,6 +97,7 @@ public class JwtProvider implements InitializingBean {
                         .collect(Collectors.toList());
         log.info("sub = {}", claims.getSubject());
         User principal = new User(claims.getSubject(), "", authorities);
+
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

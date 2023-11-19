@@ -54,5 +54,11 @@ public class MemberController {
         return "SUCESSSSSS~~~~~~~";
     }
 
+    @GetMapping("/admintest")
+    public ResponseEntity<String> roleTest() {
+        log.info("이거안들어와?");
+
+        return ResponseEntity.ok().body("SUCCESS~~");
+    }
 
 }
