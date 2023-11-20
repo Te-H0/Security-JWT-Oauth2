@@ -1,5 +1,6 @@
 package me.teho.SecurityJwtOauth2.user;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.teho.SecurityJwtOauth2.jwt.JwtProvider;
@@ -70,7 +71,9 @@ public class MemberService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         // authentication 객체를 createToken 메소드를 통해서 JWT Token을 생성
         String jwt = jwtProvider.generateAccessToken(authentication);
-
+        //claim 열어보기 => user의 이메일
+        Claims claims = jwtProvider.getClaims(jwt);
+        log.info("User의 claim의 subject(email) => {}", claims.getSubject());
         log.info("여기까지와?");
         return jwt;
 
