@@ -42,6 +42,7 @@ public class KakaoController {
             memberService.join(kakaoMemberSignUp);
         }
 
+
         log.info("{} 카카오로 로그인 프로세스 진행", kakaoUserName);
         MemberSignInDto kakaoMemberSignIn = MemberSignInDto.builder()
                 .password(kakaoUserPw)

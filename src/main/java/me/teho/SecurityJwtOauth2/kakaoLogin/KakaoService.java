@@ -79,9 +79,11 @@ public class KakaoService {
         KakaoProfile kakaoProfile = null;
         try {
             kakaoProfile = objectMapper.readValue(response2.getBody(), KakaoProfile.class);
+            log.info("kakao profile => {}", kakaoProfile.toString());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+
         return kakaoProfile;
     }
 

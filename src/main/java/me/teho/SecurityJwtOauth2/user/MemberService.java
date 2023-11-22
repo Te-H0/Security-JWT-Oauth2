@@ -44,6 +44,7 @@ public class MemberService {
                 .password(passwordEncoder.encode(memberSignUpDto.getPassword()))
                 .authorities(Collections.singleton(authority))
                 .build();
+
         return MemberSignUpDto.from(memberRepository.save(member));
     }
 

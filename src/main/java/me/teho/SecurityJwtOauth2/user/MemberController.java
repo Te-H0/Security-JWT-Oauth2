@@ -65,6 +65,6 @@ public class MemberController {
     public String ngrok() {
         log.info("이거안들어와?");
 
-        return "univey test!";
+        return "은서안뇽";
     }
 }
