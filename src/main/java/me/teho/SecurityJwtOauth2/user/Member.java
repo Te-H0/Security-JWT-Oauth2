@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -22,12 +21,16 @@ public class Member extends BaseEntity {
 //    @Column(columnDefinition = "TEXT")
 //    private String accessToken;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(
-            name = "user_authority",
-            joinColumns = {@JoinColumn(name = "id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "Authority_id", referencedColumnName = "Authority_id")})
-    private Set<Authority> authorities = new HashSet<>();
+    /*
+   @ElementCollection : 컬렉션의 각 요소를 저장할 수 있다. 부모 Entity와 독립적으로 사용 X
+   @CollectionTable : @ElementCollection과 함께 사용될 때, 생성될 테이블의 이름 지정
+   */
+    @ElementCollection(targetClass = MemberRole.class)
+    @CollectionTable(name = "member_roles",
+            joinColumns = @JoinColumn(name = "member_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<MemberRole> roleSet;
+
 
 //    public Map<String, Object> getAccessTokenClaims() {
 //        return Util.mapOf(

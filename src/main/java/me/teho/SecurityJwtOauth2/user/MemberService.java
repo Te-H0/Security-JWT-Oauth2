@@ -11,14 +11,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final AuthorityRepository authorityRepository;
+    
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -30,19 +31,20 @@ public class MemberService {
         }
         // 가입되어 있지 않은 회원이면,
         // 권한 정보 만들고
-        Authority authority = authorityRepository.findByAuthorityName("ROLE_USER").orElse(null);
-        if (authority == null) {
-            Authority roleUser = Authority.builder()
-                    .authorityName("ROLE_USER")
-                    .build();
-            authority = authorityRepository.save(roleUser);
-        }
-
+//        Authority authority = authorityRepository.findByAuthorityName("ROLE_USER").orElse(null);
+//        if (authority == null) {
+//            Authority roleUser = Authority.builder()
+//                    .authorityName("ROLE_USER")
+//                    .build();
+//            authority = authorityRepository.save(roleUser);
+//        }
+        Set<MemberRole> roles = new HashSet<>();
+        roles.add(MemberRole.ROLE_MEMBER);
         Member member = Member.builder()
                 .name(memberSignUpDto.getName())
                 .email(memberSignUpDto.getEmail())
+                .roleSet(roles)
                 .password(passwordEncoder.encode(memberSignUpDto.getPassword()))
-                .authorities(Collections.singleton(authority))
                 .build();
 
         return MemberSignUpDto.from(memberRepository.save(member));
