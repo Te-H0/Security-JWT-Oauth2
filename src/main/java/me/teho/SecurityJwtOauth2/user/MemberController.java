@@ -65,6 +65,6 @@ public class MemberController {
     public String ngrok() {
         log.info("이거안들어와?");
 
-        return "은서안뇽";
+        return "연동 성공";
     }
 }

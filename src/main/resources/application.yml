@@ -40,7 +40,7 @@ spring:
             scope: profile_nickname, profile_image, account_email
             client-name: Kakao
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8080/kakao/callback
+            redirect-uri: http://localhost:8080/user/kakao/callback
             client-authentication-method: POST
         provider:
           kakao:

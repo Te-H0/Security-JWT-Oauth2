@@ -16,9 +16,9 @@ public class KakaoController {
     private final KakaoService kakaoService;
     private final MemberService memberService;
 
-//    https://accounts.kakao.com/login/?continue=https%3A%2F%2Fkauth.kakao.com%2Foauth%2Fauthorize%3Fresponse_type%3Dcode%26redirect_uri%3Dhttp%253A%252F%252Flocalhost%253A8080%252Fkakao%252Fcallback%26through_account%3Dtrue%26client_id%3Da7112c7855122c19ace78f063bcce15a#login
+//    https://kauth.kakao.com/oauth/authorize?client_id=a7112c7855122c19ace78f063bcce15a&redirect_uri=http://localhost:8080/user/kakao/callback&response_type=code
 
-    @GetMapping("/kakao/callback")
+    @GetMapping("/user/kakao/callback")
     public String kakaoCallback(@RequestParam String code) {
         /**
          * post 방식으로 key=value 데이터를 카카오로 요청
